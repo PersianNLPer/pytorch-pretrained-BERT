@@ -16,7 +16,7 @@ if __name__ == '__main__':
     if args.segment:
         tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased', do_lower_case=False)
     else:
-        tokenizer = BasicTokenizer.from_pretrained('bert-base-multilingual-cased', do_lower_case=False)
+        tokenizer = BasicTokenizer.tokenize(do_lower_case=False)
     for line in args.input:
         args.output.write("%s\n" % (' '.join(tokenizer.tokenize(line.strip()))))
 
