@@ -1,7 +1,7 @@
 import argparse
 import sys
 import os
-from pytorch_pretrained_bert import BertTokenizer
+from pytorch_pretrained_bert import BertTokenizer, BasicTokenizer
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -9,11 +9,14 @@ if __name__ == '__main__':
                         help="The input file to be tokenized (default: STDIN")
     parser.add_argument('-o', '--output', type=argparse.FileType('w'), default=sys.stdin, metavar='PATH',
                         help="The output file containing the tokenized version of the input file (default: STDIN")
-    # parser.add_argument('-use_word_rep_source', action="store_true",
-    #                     help="Store word representation of the source as well.")
+    parser.add_argument('-segment', action="store_true",
+                        help="Segment the words after preprocessing?")
 
     args = parser.parse_args()
-    tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased', do_lower_case=False)
+    if args.segment:
+        tokenizer = BertTokenizer.from_pretrained('bert-base-multilingual-cased', do_lower_case=False)
+    else:
+        tokenizer = BasicTokenizer.from_pretrained('bert-base-multilingual-cased', do_lower_case=False)
     for line in args.input:
         args.output.write("%s\n" % (' '.join(tokenizer.tokenize(line.strip()))))
 
